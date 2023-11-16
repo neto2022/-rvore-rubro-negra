@@ -125,63 +125,59 @@ class Node {
       }
     }
   
-  _remove(node) {
-    let y = node;
-    let yOriginalColor = y ? y.color : 'B'; // Defina como 'B' se y for nulo
-    let x;
+    _remove(node) {
+      let y = node;
+      let yOriginalColor = y ? y.color : 'B'; // Defina como 'B' se y for nulo
+      let x;
   
-    if (node.left === this.NIL) {
-      x = node.right;
-      this.transplant(node, node.right);
-    } else if (node.right === this.NIL) {
-      x = node.left;
-      this.transplant(node, node.left);
-    } else {
-      y = this.minimum(node.right);
-      if (y) { // Verifica se y não é nulo
-        yOriginalColor = y.color;
-        x = y.right;
-  
-        if (y.parent === node) {
-          x.parent = y;
-        } else {
-          this.transplant(y, y.right);
-          y.right = node.right;
-          y.right.parent = y;
-        }
-  
-        this.transplant(node, y);
-        y.left = node.left;
-        y.left.parent = y;
-        y.color = node.color;
-      } else {
-        // Tratamento especial quando y é nulo
+      if (node.left === this.NIL) {
+        x = node.right;
+        this.transplant(node, node.right);
+      } else if (node.right === this.NIL) {
         x = node.left;
         this.transplant(node, node.left);
+      } else {
+        y = this.minimum(node.right);
+        if (y) {
+          yOriginalColor = y.color;
+          x = y.right;
+  
+          if (y.parent === node) {
+            x.parent = y;
+          } else {
+            this.transplant(y, y.right);
+            y.right = node.right;
+            y.right.parent = y;
+          }
+  
+          this.transplant(node, y);
+          y.left = node.left;
+          y.left.parent = y;
+          y.color = node.color;
+        } else {
+          x = node.left;
+          this.transplant(node, node.left);
+        }
+      }
+  
+      if (yOriginalColor === 'B') {
+        this.fixRemove(x);
       }
     }
   
-    if (yOriginalColor === 'B') {
-      this.fixRemove(x);
+    transplant(u, v) {
+      if (u.parent === null) {
+        this.root = v;
+      } else if (u === u.parent.left) {
+        u.parent.left = v;
+      } else {
+        u.parent.right = v;
+      }
+  
+      if (v) {
+        v.parent = u.parent;
+      }
     }
-  }
-  
-  
-  
-  transplant(u, v) {
-    if (u.parent === null) {
-      this.root = v;
-    } else if (u === u.parent.left) {
-      u.parent.left = v;
-    } else {
-      u.parent.right = v;
-    }
-  
-    if (v) { // Verifica se v não é nulo
-      v.parent = u.parent;
-    }
-  }
-  
   
     fixRemove(x) {
       while (x !== this.root && x.color === 'B') {
@@ -237,14 +233,13 @@ class Node {
       }
       x.color = 'B';
     }
-  
+
     minimum(node) {
-    while (node && node.left !== this.NIL) {
-      node = node.left;
+      while (node && node.left !== this.NIL) {
+        node = node.left;
+      }
+      return node;
     }
-    return node;
-  }
-  
   
     search(data) {
       return this._search(this.root, data);
@@ -262,38 +257,39 @@ class Node {
       }
     }
   
-      printTree(node = this.root, level = 0, prefix = 'ROOT') {
+    printTree(node = this.root, level = 0, prefix = 'ROOT') {
       if (node !== null) {
         console.log('  '.repeat(level), `${prefix}(${node.color}) ${node.data}`);
         this.printTree(node.left, level + 1, 'Left');
         this.printTree(node.right, level + 1, 'Right');
-          }
       }
+    }
+  
+    getRoot() {
+      return this.root;
+    }
   }
   
   // Teste
   
   let tree = new RedBlackTree();
   
-  // Insere na árvore os elementos {5, 3, 8, 2, 4, 7, 9}
-  [5, 3, 8, 2, 4, 7, 9].forEach((num) => {
-    tree.insert(num);
-  });
-  
-  // Adiciona mais elementos para alcançar altura mínima 3 e 3 nós vermelhos
-  [1, 6, 10].forEach((num) => {
+  // Insere na árvore os elementos {5, 3, 8, 2, 4, 7, 9, 1, 6, 10}
+  [5, 3, 8, 2, 4, 7, 9, 1, 6, 10].forEach((num) => {
     tree.insert(num);
   });
   
   // Imprime a árvore antes das remoções
   console.log("Árvore antes da remoção do nó raiz:");
+  console.log("Raiz:", tree.getRoot().data);
   tree.printTree();
   
   // Realiza a remoção do nó raiz (5)
-  tree.remove(5);
+  tree.remove(tree.getRoot().data);
   
   // Imprime a árvore após a remoção do nó raiz
   console.log("\nÁrvore após a remoção do nó raiz:");
+  console.log("Nova Raiz:", tree.getRoot().data);
   tree.printTree();
   
   // Realiza a remoção dos nós vermelhos (3, 7, 1, 6)
@@ -304,7 +300,6 @@ class Node {
   
   // Imprime a árvore após a remoção dos nós vermelhos
   console.log("\nÁrvore após a remoção dos nós vermelhos:");
+  console.log("Nova Raiz:", tree.getRoot().data);
   tree.printTree();
-  
-  
   
