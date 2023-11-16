@@ -13,7 +13,9 @@ class Node {
       this.root = null;
       this.NIL = new Node(null, 'B');
     }
-  
+    getRoot() {
+        return this.root;
+      }
     insert(data) {
       let node = new Node(data, 'R');
       if (!this.root) {
@@ -44,43 +46,51 @@ class Node {
     }
   
     fixInsert(node) {
-      while (node.parent && node.parent.color === 'R') {
-        if (node.parent === node.parent.parent.left) {
-          let uncle = node.parent.parent.right;
-          if (uncle && uncle.color === 'R') {
-            node.parent.color = 'B';
-            uncle.color = 'B';
-            node.parent.parent.color = 'R';
-            node = node.parent.parent;
-          } else {
-            if (node === node.parent.right) {
-              node = node.parent;
-              this.leftRotate(node);
+        while (node.parent && node.parent.color === 'R') {
+          if (node.parent === node.parent.parent.left) {
+            let uncle = node.parent.parent.right;
+            if (uncle && uncle.color === 'R') {
+              console.log("Troca de cor executada");
+              console.log(`Trocou de red para black`);
+              node.parent.color = 'B';
+              uncle.color = 'B';
+              node.parent.parent.color = 'R';
+              node = node.parent.parent;
+            } else {
+              if (node === node.parent.right) {
+                node = node.parent;
+                this.leftRotate(node);
+              }
+              console.log("Troca de cor executada");
+              console.log(`Trocou de red para black`);
+              node.parent.color = 'B';
+              node.parent.parent.color = 'R';
+              this.rightRotate(node.parent.parent);
             }
-            node.parent.color = 'B';
-            node.parent.parent.color = 'R';
-            this.rightRotate(node.parent.parent);
-          }
-        } else {
-          let uncle = node.parent.parent.left;
-          if (uncle && uncle.color === 'R') {
-            node.parent.color = 'B';
-            uncle.color = 'B';
-            node.parent.parent.color = 'R';
-            node = node.parent.parent;
           } else {
-            if (node === node.parent.left) {
-              node = node.parent;
-              this.rightRotate(node);
+            let uncle = node.parent.parent.left;
+            if (uncle && uncle.color === 'R') {
+              console.log("Troca de cor executada");
+              console.log(`Trocou de red para black`);
+              node.parent.color = 'B';
+              uncle.color = 'B';
+              node.parent.parent.color = 'R';
+              node = node.parent.parent;
+            } else {
+              if (node === node.parent.left) {
+                node = node.parent;
+                this.rightRotate(node);
+              }
+              console.log("Troca de cor executada");
+              console.log(`Trocou de red para black`);
+              node.parent.color = 'B';
+              node.parent.parent.color = 'R';
+              this.leftRotate(node.parent.parent);
             }
-            node.parent.color = 'B';
-            node.parent.parent.color = 'R';
-            this.leftRotate(node.parent.parent);
           }
         }
+        this.root.color = 'B';
       }
-      this.root.color = 'B';
-    }
   
     leftRotate(x) {
       let y = x.right;
@@ -180,60 +190,76 @@ class Node {
     }
   
     fixRemove(x) {
-      while (x !== this.root && x.color === 'B') {
-        if (x === x.parent.left) {
-          let w = x.parent.right;
-          if (w.color === 'R') {
-            w.color = 'B';
-            x.parent.color = 'R';
-            this.leftRotate(x.parent);
-            w = x.parent.right;
-          }
-          if (w.left.color === 'B' && w.right.color === 'B') {
-            w.color = 'R';
-            x = x.parent;
-          } else {
-            if (w.right.color === 'B') {
-              w.left.color = 'B';
-              w.color = 'R';
-              this.rightRotate(w);
+        while (x !== this.root && x.color === 'B') {
+          if (x === x.parent.left) {
+            let w = x.parent.right;
+            if (w.color === 'R') {
+              console.log("Troca de cor executada");
+              console.log(`Trocou de red para black`);
+              w.color = 'B';
+              x.parent.color = 'R';
+              this.leftRotate(x.parent);
               w = x.parent.right;
             }
-            w.color = x.parent.color;
-            x.parent.color = 'B';
-            w.right.color = 'B';
-            this.leftRotate(x.parent);
-            x = this.root;
-          }
-        } else {
-          let w = x.parent.left;
-          if (w.color === 'R') {
-            w.color = 'B';
-            x.parent.color = 'R';
-            this.rightRotate(x.parent);
-            w = x.parent.left;
-          }
-          if (w.right.color === 'B' && w.left.color === 'B') {
-            w.color = 'R';
-            x = x.parent;
-          } else {
-            if (w.left.color === 'B') {
-              w.right.color = 'B';
+            if (w.left.color === 'B' && w.right.color === 'B') {
+              console.log("Troca de cor executada");
+              console.log(`Trocou de red para black`);
               w.color = 'R';
-              this.leftRotate(w);
+              x = x.parent;
+            } else {
+              if (w.right.color === 'B') {
+                console.log("Troca de cor executada");
+                console.log(`Trocou de red para black`);
+                w.left.color = 'B';
+                w.color = 'R';
+                this.rightRotate(w);
+                w = x.parent.right;
+              }
+              console.log("Troca de cor executada");
+              console.log(`Trocou de red para ${x.parent.color}`);
+              w.color = x.parent.color;
+              x.parent.color = 'B';
+              w.right.color = 'B';
+              this.leftRotate(x.parent);
+              x = this.root;
+            }
+          } else {
+            let w = x.parent.left;
+            if (w.color === 'R') {
+              console.log("Troca de cor executada");
+              console.log(`Trocou de red para black`);
+              w.color = 'B';
+              x.parent.color = 'R';
+              this.rightRotate(x.parent);
               w = x.parent.left;
             }
-            w.color = x.parent.color;
-            x.parent.color = 'B';
-            w.left.color = 'B';
-            this.rightRotate(x.parent);
-            x = this.root;
+            if (w.right.color === 'B' && w.left.color === 'B') {
+              console.log("Troca de cor executada");
+              console.log(`Trocou de red para black`);
+              w.color = 'R';
+              x = x.parent;
+            } else {
+              if (w.left.color === 'B') {
+                console.log("Troca de cor executada");
+                console.log(`Trocou de red para black`);
+                w.right.color = 'B';
+                w.color = 'R';
+                this.leftRotate(w);
+                w = x.parent.left;
+              }
+              console.log("Troca de cor executada");
+              console.log(`Trocou de red para ${x.parent.color}`);
+              w.color = x.parent.color;
+              x.parent.color = 'B';
+              w.left.color = 'B';
+              this.rightRotate(x.parent);
+              x = this.root;
+            }
           }
         }
+        x.color = 'B';
       }
-      x.color = 'B';
-    }
-
+  
     minimum(node) {
       while (node && node.left !== this.NIL) {
         node = node.left;
@@ -264,10 +290,6 @@ class Node {
         this.printTree(node.right, level + 1, 'Right');
       }
     }
-  
-    getRoot() {
-      return this.root;
-    }
   }
   
   // Teste
@@ -285,7 +307,7 @@ class Node {
   tree.printTree();
   
   // Realiza a remoção do nó raiz (5)
-  tree.remove(tree.getRoot().data);
+  tree.remove(5);
   
   // Imprime a árvore após a remoção do nó raiz
   console.log("\nÁrvore após a remoção do nó raiz:");
