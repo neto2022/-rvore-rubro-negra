@@ -12,6 +12,9 @@ class RedBlackTree {
     constructor() {
         this.root = null;
         this.NIL = new Node(null, 'B');
+        this.NIL.left = null;
+        this.NIL.right = null;
+        this.NIL.parent = null;
     }
 
     insert(data) {
@@ -286,6 +289,7 @@ class RedBlackTree {
                     x = this.root;
                 }
             }
+            
         }
         x.color = 'B';
     }
@@ -309,7 +313,7 @@ class RedBlackTree {
         redNodes.forEach((node) => {
             console.log(`\nRemovendo nó vermelho com valor ${node.data}`);
             console.log(`Operações realizadas:`);
-            this.remove(node.data);
+            this.remove(node.data); 
             this.printTree();
         });
     }
@@ -323,6 +327,23 @@ class RedBlackTree {
             this.findRedNodes(node.right, redNodes);
         }
         return redNodes;
+    }
+
+    removeRoot() {
+        if (this.root) {
+            console.log(`Removendo a raiz com valor ${this.root.data}`);
+            this._remove(this.root);
+    
+            // Set a new root (successor of the removed root)
+            if (this.root !== null) {
+                while (this.root.parent !== null) {
+                    this.root = this.root.parent;
+                }
+                this.root.color = 'B'; // Ensure the new root is black
+            }
+        } else {
+            console.log("A árvore está vazia. Não há raiz para remover.");
+        }
     }
 }
 
@@ -342,8 +363,9 @@ console.log("Raiz:", tree.getRoot().data);
 tree.printTree();
 
 // Imprime a árvore após a remoção do nó raiz
+tree.removeRoot();
 console.log("\nÁrvore após a remoção do nó raiz:");
-console.log("Nova Raiz:", tree.getRoot().data);
+console.log("Raiz:", tree.getRoot().data);
 tree.printTree();
 
 
