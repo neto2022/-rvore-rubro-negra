@@ -289,7 +289,7 @@ class RedBlackTree {
                     x = this.root;
                 }
             }
-            
+
         }
         x.color = 'B';
     }
@@ -308,12 +308,12 @@ class RedBlackTree {
 
     removeRedNodes() {
         console.log("\nRemovendo nós vermelhos automaticamente:");
-    
+
         const redNodes = this.findRedNodes(this.root);
         redNodes.forEach((node) => {
             console.log(`\nRemovendo nó vermelho com valor ${node.data}`);
             console.log(`Operações realizadas:`);
-            this.remove(node.data); 
+            this.remove(node.data);
             this.printTree();
         });
     }
@@ -333,7 +333,7 @@ class RedBlackTree {
         if (this.root) {
             console.log(`Removendo a raiz com valor ${this.root.data}`);
             this._remove(this.root);
-    
+
             // Set a new root (successor of the removed root)
             if (this.root !== null) {
                 while (this.root.parent !== null) {
@@ -343,6 +343,24 @@ class RedBlackTree {
             }
         } else {
             console.log("A árvore está vazia. Não há raiz para remover.");
+        }
+    }
+    clearTree(node) {
+        if (node !== null && node !== this.NIL) {
+            this.clearTree(node.left);
+            this.clearTree(node.right);
+
+            // Check if 'node' is not null before accessing its properties
+            if (node.parent !== null) {
+                if (node === node.parent.left) {
+                    node.parent.left = null;
+                } else {
+                    node.parent.right = null;
+                }
+            } else {
+                // 'node' is the root
+                this.root = null;
+            }
         }
     }
 }
@@ -376,3 +394,11 @@ tree.printTree();
 
 // Realiza a remoção dos nós vermelhos automaticamente
 tree.removeRedNodes();
+
+// Limpa a árvore inteira
+tree.clearTree(tree.getRoot());
+
+// Imprimir a árvore depois de limpar
+console.log("\nÁrvore após limpar a árvore:");
+console.log("Raiz:", tree.getRoot() ? tree.getRoot().data : "Árvore vazia");
+tree.printTree();
