@@ -133,6 +133,7 @@ class RedBlackTree {
     remove(data) {
         let node = this.search(data);
         if (node) {
+            console.log(`Realizando a remoção do nó com valor ${data}`);
             this._remove(node);
         }
     }
@@ -173,6 +174,7 @@ class RedBlackTree {
         }
 
         if (yOriginalColor === 'B') {
+            console.log(`  - Nó removido era preto, ajustando a árvore`);
             this.fixRemove(x);
         }
     }
@@ -299,6 +301,29 @@ class RedBlackTree {
             this.printTree(node.right, level + 1, 'Right');
         }
     }
+
+    removeRedNodes() {
+        console.log("\nRemovendo nós vermelhos automaticamente:");
+    
+        const redNodes = this.findRedNodes(this.root);
+        redNodes.forEach((node) => {
+            console.log(`\nRemovendo nó vermelho com valor ${node.data}`);
+            console.log(`Operações realizadas:`);
+            this.remove(node.data);
+            this.printTree();
+        });
+    }
+
+    findRedNodes(node, redNodes = []) {
+        if (node !== null && node !== this.NIL) {
+            if (node.color === 'R') {
+                redNodes.push(node);
+            }
+            this.findRedNodes(node.left, redNodes);
+            this.findRedNodes(node.right, redNodes);
+        }
+        return redNodes;
+    }
 }
 
 
@@ -316,21 +341,16 @@ console.log("Árvore antes da remoção do nó raiz:");
 console.log("Raiz:", tree.getRoot().data);
 tree.printTree();
 
-// Realiza a remoção do nó raiz (5)
-tree.remove(5);
-
 // Imprime a árvore após a remoção do nó raiz
 console.log("\nÁrvore após a remoção do nó raiz:");
 console.log("Nova Raiz:", tree.getRoot().data);
 tree.printTree();
 
-// Realiza a remoção dos nós vermelhos (3, 7, 1, 6)
-tree.remove(3);
-tree.remove(7);
-tree.remove(1);
-tree.remove(6);
 
-// Imprime a árvore após a remoção dos nós vermelhos
-console.log("\nÁrvore após a remoção dos nós vermelhos:");
-console.log("Nova Raiz:", tree.getRoot().data);
+// Imprime a árvore antes da remoção dos nós vermelhos
+console.log("Árvore antes da remoção dos nós vermelhos:");
+console.log("Raiz:", tree.getRoot().data);
 tree.printTree();
+
+// Realiza a remoção dos nós vermelhos automaticamente
+tree.removeRedNodes();
