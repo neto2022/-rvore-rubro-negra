@@ -400,7 +400,6 @@ arr2.forEach((num) => {
     tree.insert(num);
 });
 
-
 // Imprime a árvore antes das remoções
 console.log("Árvore antes da remoção do nó raiz:");
 console.log("Raiz:", tree.getRoot().data);
