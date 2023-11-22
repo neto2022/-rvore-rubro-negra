@@ -102,9 +102,6 @@ class RedBlackTree {
         // Rotação à esquerda
         let y = x.right;
         x.right = y.left;
-        if (y.left !== this.NIL) {
-            y.left.parent = x;
-        }
         y.parent = x.parent;
         if (x.parent === null) {
             this.root = y;
@@ -121,9 +118,6 @@ class RedBlackTree {
         // Rotação à direita
         let x = y.left;
         y.left = x.right;
-        if (x.right !== this.NIL) {
-            x.right.parent = y;
-        }
         x.parent = y.parent;
         if (y.parent === null) {
             this.root = x;
@@ -369,14 +363,38 @@ class RedBlackTree {
     }
 }
 
+let arr1 = [];
+let arr2 = [];
+
+// Função para gerar um número aleatório sem repetição
+function generateUniqueRandomNumber(usedNumbers) {
+    let randomNumber;
+    do {
+        randomNumber = Number((Math.random() * 10).toFixed(0));
+    } while (usedNumbers.includes(randomNumber));
+    return randomNumber;
+}
+
+// Preencher arr1
+for (let i = 0; i < 10; i++) {
+    arr1[i] = generateUniqueRandomNumber(arr1);
+}
+
+// Preencher arr2
+for (let i = 0; i < 10; i++) {
+    arr2[i] = generateUniqueRandomNumber(arr2);
+}
+
 // Teste
 
 let tree = new RedBlackTree();
 
-// Insere na árvore os elementos {5, 3, 8, 2, 4, 7, 9, 1, 6, 10}
-[5, 3, 8, 2, 4, 7, 9, 1, 6, 10].forEach((num) => {
+// Insere na árvore os elementos aleatóriamente, mas sem repetir
+arr2.forEach((num) => {
+    console.log(num);
     tree.insert(num);
 });
+
 
 // Imprime a árvore antes das remoções
 console.log("Árvore antes da remoção do nó raiz:");
