@@ -299,17 +299,23 @@ class RedBlackTree {
         }
     }
 
-    removeRedNodes() {
-        // Remove automaticamente todos os nós vermelhos da árvore
-        console.log("\nRemovendo nós vermelhos automaticamente:");
-
+    removeRedNodesRandomly() {
+        // Remove nós vermelhos aleatoriamente da árvore
+        console.log("\nRemovendo nós vermelhos aleatoriamente:");
+    
         const redNodes = this.findRedNodes(this.root);
-        redNodes.forEach((node) => {
-            console.log(`\nRemovendo nó vermelho com valor ${node.data}`);
+    
+        if (redNodes.length > 0) {
+            const randomIndex = Math.floor(Math.random() * redNodes.length);
+            const randomRedNode = redNodes[randomIndex];
+    
+            console.log(`\nRemovendo nó vermelho aleatório com valor ${randomRedNode.data}`);
             console.log(`Operações realizadas:`);
-            this.remove(node.data);
+            this.remove(randomRedNode.data);
             this.printTree();
-        });
+        } else {
+            console.log("Não há nós vermelhos para remover.");
+        }
     }
 
     findRedNodes(node, redNodes = []) {
@@ -391,7 +397,6 @@ let tree = new RedBlackTree();
 
 // Insere na árvore os elementos aleatóriamente, mas sem repetir
 arr2.forEach((num) => {
-    console.log(num);
     tree.insert(num);
 });
 
@@ -414,7 +419,7 @@ console.log("Raiz:", tree.getRoot().data);
 tree.printTree();
 
 // Realiza a remoção dos nós vermelhos automaticamente
-tree.removeRedNodes();
+tree.removeRedNodesRandomly();
 
 // Limpa a árvore inteira
 tree.clearTree(tree.getRoot());
